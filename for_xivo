@@ -1,0 +1,27 @@
+#!/usr/bin/python
+
+from xivo import agi
+import sugarcrm
+
+url = 'http://crm/service/v4_1/rest.php'
+username = ''
+password = ''
+
+
+agi = agi.AGI()
+caller = agi.env['agi_callerid']
+
+agi.verbose(caller)
+
+try:
+    conn = sugarcrm.Sugarcrm(url, username, password)
+except ValueError:
+    print "cann't connect to " + url
+    exit(1)
+
+# Exist :  phone_home phone_mobile phone_work phone_other phone_fax
+
+query = conn.modules['Contacts'].query().filter(phone_work__exact="%s" % caller)
+for contact in query:
+    agi.verbose('CONTACT : ' + contact['first_name'] + ' ' + contact['last_name'])
+
