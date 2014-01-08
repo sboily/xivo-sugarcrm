@@ -1,22 +1,37 @@
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2014 Sylvain Boily <sboily@proformatique.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #!/usr/bin/python
 
 from xivo import agi
 import sugarcrm
 
-url = 'http://crm/service/v4_1/rest.php'
-username = ''
-password = ''
-
-
 agi = agi.AGI()
-caller = agi.env['agi_callerid']
-
-agi.verbose(caller)
+caller = agi.env["agi_callerid"]
+url = agi.get_variable("SUGARCRM_URL")
+username = agi.get_variable("SUGARCRM_USERNAME")
+password = agi.get_variable("SUGARCRM_PASSWD")
 
 try:
+    agi.verbose("Trying to connect %s with %s : %s " %(url, username, password))
     conn = sugarcrm.Sugarcrm(url, username, password)
 except ValueError:
-    print "cann't connect to " + url
+    agi.verbose("can't connect to " + url)
     exit(1)
 
 # Exist :  phone_home phone_mobile phone_work phone_other phone_fax
@@ -24,4 +39,6 @@ except ValueError:
 query = conn.modules['Contacts'].query().filter(phone_work__exact="%s" % caller)
 for contact in query:
     agi.verbose('CONTACT : ' + contact['first_name'] + ' ' + contact['last_name'])
+    agi.set_variable("SUGARCRM-FIRSTNAME", contact['first_name'])
+    agi.set_variable("SUGARCRM-LASTNAME", contact['last_name'])
 
