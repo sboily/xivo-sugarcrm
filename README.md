@@ -35,6 +35,12 @@ Adding on your sheet model the variables :
 - {dp-sugarcrm-lastname}
 - {dp-sugarcrm-firstname}
 
+Adding on sheet model action the value :
+
+- http://crm/index.php?action=ajaxui#ajaxUILoc=index.php?module=Contacts&action=DDetailView&record={dp-sugarcrm-id}
+
+And authorize the popup url in xivo client.
+
 Library
 -------
 
