@@ -21,7 +21,7 @@ Installation on XiVO
 
 Edit the sugarcrm.conf to set the good information via vim or webi.
 
-1. asterisk -r
+1. asterisk -r::
  xivo*CLI> dialplan reload
  xivo*CLI> dialplan show sub-sugarcrm
 
