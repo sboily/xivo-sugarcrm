@@ -27,6 +27,14 @@ Edit the sugarcrm.conf to set the good information via vim or webi.
 
 You need to add this subroutine in your DID for exemple on the webi.
 
+CTI config
+----------
+
+Adding on your sheet model the variables :
+
+- {dp-sugarcrm-lastname}
+- {dp-sugarcrm-firstname}
+
 Library
 -------
 
