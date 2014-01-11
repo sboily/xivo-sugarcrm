@@ -38,7 +38,7 @@ except ValueError:
 query = conn.modules['Contacts'].query().filter(phone_work__exact="%s" % caller)
 for contact in query:
     agi.verbose('CONTACT : ' + contact['first_name'] + ' ' + contact['last_name'])
-    agi.set_variable("SUGARCRM-ID", contact['ID'])
+    agi.set_variable("SUGARCRM-ID", contact['id'])
     agi.set_variable("SUGARCRM-FIRSTNAME", contact['first_name'])
     agi.set_variable("SUGARCRM-LASTNAME", contact['last_name'])
 
