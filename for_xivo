@@ -20,14 +20,27 @@
 from xivo import agi
 import sugarcrm
 
+debug = 0
 agi = agi.AGI()
-caller = agi.env["agi_callerid"]
-url = agi.get_variable("SUGARCRM_URL")
-username = agi.get_variable("SUGARCRM_USERNAME")
-password = agi.get_variable("SUGARCRM_PASSWD")
+
+if debug:
+    agi.DEBUG_PASSTHROUGH = 1
+    caller = "8000"
+    url = "http://crm/service/v4_1/rest.php"
+    username = "admin"
+    password = "admin"
+else:
+    caller = agi.env["agi_callerid"]
+    url = agi.get_variable("SUGARCRM_URL")
+    username = agi.get_variable("SUGARCRM_USERNAME")
+    password = agi.get_variable("SUGARCRM_PASSWD")
 
 try:
-    agi.verbose("Trying to connect %s with %s : %s " %(url, username, password))
+    if debug:
+        print "Trying to connect %s with %s : %s " %(url, username, password)
+        print "Searching information for caller %s" % caller
+    else:
+        agi.verbose("Trying to connect %s with %s : %s " %(url, username, password))
     conn = sugarcrm.Sugarcrm(url, username, password)
 except ValueError:
     agi.verbose("can't connect to " + url)
@@ -37,8 +50,13 @@ except ValueError:
 
 query = conn.modules['Contacts'].query().filter(phone_work__exact="%s" % caller)
 for contact in query:
-    agi.verbose('CONTACT : ' + contact['first_name'] + ' ' + contact['last_name'])
-    agi.set_variable("SUGARCRM-ID", contact['id'])
-    agi.set_variable("SUGARCRM-FIRSTNAME", contact['first_name'])
-    agi.set_variable("SUGARCRM-LASTNAME", contact['last_name'])
-
+    if debug:
+        print "CONTACT : " + contact['first_name'] + " " + contact['last_name']
+        print "SUGARCRM-ID", contact['id']
+        print "SUGARCRM-FIRSTNAME", contact['first_name']
+        print "SUGARCRM-LASTNAME", contact['last_name']
+    else:
+        agi.verbose("CONTACT : " + contact['first_name'] + " " + contact['last_name'])
+        agi.set_variable("SUGARCRM-ID", contact['id'])
+        agi.set_variable("SUGARCRM-FIRSTNAME", contact['first_name'])
+        agi.set_variable("SUGARCRM-LASTNAME", contact['last_name'])

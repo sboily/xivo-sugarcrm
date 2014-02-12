@@ -47,3 +47,12 @@ Library
 -------
 
 Taken from : https://github.com/luisbarrueco/python_webservices_library/
+
+Debug
+-----
+
+To debugging the AGI edit the script for_xivo and change the debug value to 1. Change the default value with your value.
+
+To launching the script :
+
+ * echo | ./for_xivo
